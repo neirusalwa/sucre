@@ -15,3 +15,8 @@ modules
 -etc...  
 
 so far only seek is available but i am working on the ytdl script and it will be usable along with seek  
+
+### requirements
+ffmpeg  
+ffprobe  
+gifski  
