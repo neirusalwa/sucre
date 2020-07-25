@@ -20,3 +20,6 @@ so far only seek is available but i am working on the ytdl script and it will be
 ffmpeg  
 ffprobe  
 gifski  
+
+### optional
+youtube-dl
