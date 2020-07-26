@@ -20,7 +20,8 @@ ffprobe
 gifski  
 
 ### optional
-youtube-dl
+youtube-dl (for the ytdl rune)  
+gifsicle (for the sicle rune)  
 
 ### faq
 > why does it remove the video after the gif is done?
@@ -38,7 +39,7 @@ no
 ### available runes
 seek : adds a function to set a start point and an end point to the clip you want to gif instead of converting the entire video  
 ytdl : lets you use an online video just double click the script instead of the usual drag and drop and you will be prompted to input a url  
+sicle : compress a gif until it hits a target size (default 8MB for discord)  
 
 ### wip runes
-optimization : simple gifsicle loop until the gif reaches a desired target size
 profiles : enable the ability to select a specific framerate or size for the gif as well as adding custom settings "easily" (by editing the profiles script) 
