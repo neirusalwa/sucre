@@ -14,6 +14,9 @@ runes
 -script.bat  
 -etc...  
 
+### warning
+this script does NOT have robust error handling esp the seek rune so if u input wrong values things WILL break  
+
 ### requirements
 ffmpeg  
 ffprobe  
@@ -40,6 +43,5 @@ no
 seek : adds a function to set a start point and an end point to the clip you want to gif instead of converting the entire video  
 ytdl : lets you use an online video just double click the script instead of the usual drag and drop and you will be prompted to input a url  
 sicle : compress a gif until it hits a target size (default 8MB for discord)  
-
-### wip runes
 profiles : enable the ability to select a specific framerate or size for the gif as well as adding custom settings "easily" (by editing the profiles script) 
+
