@@ -8,7 +8,7 @@ however unlike vanille sucre is entirely self contained thus every feature vanil
 to get those features u just need to follow this folder structure  
 
 sucre.bat  
-modules   
+runes    
 -script.bat  
 -script.bat  
 -script.bat  
@@ -23,3 +23,13 @@ gifski
 
 ### optional
 youtube-dl
+
+### faq
+> why does it remove the video after the gif is done?
+the goal of this script is to make gifs not to be a youtube dl downloader, if u want smth like that feel free to take a look at heyam on my github which does exactly that  
+
+> why are scripts called "runes"?
+if u know u know  
+
+> why batch?
+no
