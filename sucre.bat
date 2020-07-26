@@ -11,6 +11,8 @@ where gifski.exe >nul 2>nul
 if not %errorlevel% geq 0 call :err_%errn%
 echo requirements met
 if exist "runes" set PATH=%PATH%;%~dp0;%~dp0runes >nul 2>nul 
+set root=%~dp0
+set dl=0
 set src=%~1
 if exist "%src%" call :probe
 for /f "delims=" %%I in ('where ytdl.bat') do set rune=%%I
@@ -83,6 +85,7 @@ set "errn=1"
 call :err_%errn% 2>nul
 
 :$enc
+cd %root%
 md _temp & cls
 ffmpeg  %s% -hwaccel auto -i "%src%" %t% -vsync vfr -r %f% -vf "scale=%w%:%h%:flags=lanczos" "_temp\frames%%04d.png"
 title sucre - assembling "%file%"
