@@ -53,7 +53,6 @@ for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries str
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "w=%%I"
 set axis=h
 if %h% geq %w% set axis=v
-echo %f% & pause
 set /a "f=%f%+%f%%%2"
 if %f% geq 50 set f=50
 set $w=%w%
