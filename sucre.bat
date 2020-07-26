@@ -1,7 +1,6 @@
 <# : sucre.bat
 @echo off
 @chcp 65001 >nul
-setlocal
 title sucre
 set "errn=0"
 set PATH=%PATH%;%~dp0
@@ -11,11 +10,11 @@ where gifski.exe >nul 2>nul
 if not %errorlevel% geq 0 call :err_%errn%
 echo requirements met
 if exist "runes" set PATH=%PATH%;%~dp0;%~dp0runes >nul 2>nul 
-set root=%~dp0
+set root=%~dp0runes
 set dl=0
 set src=%~1
 if exist "%src%" call :probe
-for /f "delims=" %%I in ('where ytdl.bat') do set rune=%%I
+for /f "delims=" %%I in ('where ytdl.bat') do set rune=%%I >nul 2>nul
 call %rune% & cls
 call :probe
 
@@ -71,10 +70,11 @@ set w=-1
 call :enc
 
 :enc
+cd %root%
 set "s=-ss 0"
 set "t=-t %t%"
-for /f "delims=" %%I in ('where seek.bat') do set rune=%%I
-call %rune% & cls
+::for /f "delims=" %%I in ('where seek.bat') do set rune=%%I >nul 2>nul
+call seek.bat 2>nul
 if %w% equ %$w% set w=-1
 if %h% equ %$h% set h=-1
 title sucre - exploding "%file%"
@@ -85,7 +85,6 @@ set "errn=1"
 call :err_%errn% 2>nul
 
 :$enc
-cd %root%
 md _temp & cls
 ffmpeg  %s% -hwaccel auto -i "%src%" %t% -vsync vfr -r %f% -vf "scale=%w%:%h%:flags=lanczos" "_temp\frames%%04d.png"
 title sucre - assembling "%file%"
