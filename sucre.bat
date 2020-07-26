@@ -92,7 +92,12 @@ goto :eof
 :done
 cls
 rd /s /q _temp
-if %dl%=1 del /q "%src%"
+if %dl%=1 call :clean
 echo the gif has successfully been made
+pause
 exit
+
+:clean
+del /q "%src%"
+goto:eof
 #>
