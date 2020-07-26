@@ -10,13 +10,12 @@ where ffprobe.exe >nul 2>nul
 where gifski.exe >nul 2>nul
 if not %errorlevel% geq 0 call :err_%errn%
 echo requirements met
-if exist "modules" set PATH=%PATH%;%~dp0;%~dp0modules >nul 2>nul 
+if exist "runes" set PATH=%PATH%;%~dp0;%~dp0runes >nul 2>nul 
 set src=%~1
-set $src="%src%"
-for %%I IN (%$src%) do set $1=%%~dpI
-for %%I IN (%$src%) do set $2=%%~nI
-set file=%$1%%$2%.gif
 if exist "%src%" call :probe
+for /f "delims=" %%I in ('where ytdl.bat') do set rune=%%I
+call %rune% & cls
+call :probe
 
 :err_0
 cls
@@ -41,6 +40,10 @@ exit
 
 :probe
 cls
+set $src="%src%"
+for %%I IN (%$src%) do set $1=%%~dpI
+for %%I IN (%$src%) do set $2=%%~nI
+set file=%$1%%$2%.gif
 title sucre - analysing "%src%"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=r_frame_rate -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "f=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -sexagesimal -show_entries format^=duration -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "t=%%I"
@@ -67,19 +70,19 @@ call :enc
 :enc
 set "s=-ss 0"
 set "t=-t %t%"
-for /f "delims=" %%I in ('where seek.bat') do set module=%%I >nul 2>nul 
-call %module% >nul 2>nul 
+for /f "delims=" %%I in ('where seek.bat') do set rune=%%I
+call %rune% & cls
 if %w% equ %$w% set w=-1
 if %h% equ %$h% set h=-1
 title sucre - exploding "%file%"
 call :$enc
-if exist "%file%" rd /s /q _temp
 if exist "%file%" call :done
+
 set "errn=1"
 call :err_%errn% 2>nul
 
 :$enc
-md _temp
+md _temp & cls
 ffmpeg  %s% -hwaccel auto -i "%src%" %t% -vsync vfr -r %f% -vf "scale=%w%:%h%:flags=lanczos" "_temp\frames%%04d.png"
 title sucre - assembling "%file%"
 gifski --fps %f% -o "%file%" _temp\frames*.png
@@ -87,6 +90,8 @@ goto :eof
 
 :done
 cls
+rd /s /q _temp
+if %dl%=1 del /q "%src%"
 echo the gif has successfully been made
 exit
 #>
