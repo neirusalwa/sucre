@@ -47,12 +47,13 @@ for %%I IN (%$src%) do set $1=%%~dpI
 for %%I IN (%$src%) do set $2=%%~nI
 set file=%$1%%$2%.gif
 title sucre - analysing "%src%"
-for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=r_frame_rate -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "f=%%I"
+for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=avg_frame_rate -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "f=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -sexagesimal -show_entries format^=duration -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "t=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=height -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "h=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "w=%%I"
 set axis=h
 if %h% geq %w% set axis=v
+echo %f% & pause
 set /a "f=%f%+%f%%%2"
 if %f% geq 50 set f=50
 set $w=%w%
@@ -95,7 +96,7 @@ goto :eof
 :done
 cls
 rd /s /q _temp
-if %dl%=1 call :clean
+if %dl% equ 1 call :clean
 echo the gif has successfully been made
 pause
 exit
