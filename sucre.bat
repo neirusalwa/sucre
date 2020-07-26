@@ -92,15 +92,14 @@ title sucre - assembling "%file%"
 gifski --fps %f% -o "%file%" _temp\frames*.png
 goto :eof
 
+:clean
+del /q "%src%"
+goto:eof
+
 :done
 cls
 rd /s /q _temp
 if %dl% equ 1 call :clean
 echo the gif has successfully been made
-pause
 exit
-
-:clean
-del /q "%src%"
-goto:eof
 #>
