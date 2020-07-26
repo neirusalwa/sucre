@@ -57,12 +57,14 @@ for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries str
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -sexagesimal -show_entries format^=duration -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "t=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=height -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "h=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "w=%%I"
+cd %root%
 set axis=h
 if %h% geq %w% set axis=v
 set /a "f=%f%+%f%%%2"
 if %f% geq 50 set f=50
 set $w=%w%
 set $h=%h%
+call profiles.bat 2>nul && call :enc 2>nul
 call :%axis%
 
 :h
@@ -71,18 +73,16 @@ if %w% geq 400 set w=400
 call :enc
 
 :v
-set h=-1
 if %h% geq 300 set h=300
 set w=-1
 call :enc
 
 :enc
-cd %root%
 set "s=-ss 0"
 set "t=-t %t%"
 call seek.bat 2>nul
-if %w% equ %$w% set w=-1
-if %h% equ %$h% set h=-1
+if "%w%" == "%$w%" set w=-1
+if "%h%" == "%$h%" set h=-1
 title sucre - exploding "%file%"
 call :$enc
 if exist "%file%" call :done
