@@ -12,6 +12,7 @@ echo requirements met
 if exist "runes" set PATH=%PATH%;%~dp0;%~dp0runes >nul 2>nul 
 set root=%~dp0runes
 set dl=0
+set target=8000000
 set src=%~1
 if exist "%src%" call :probe
 call ytdl.bat 2>nul
@@ -35,6 +36,13 @@ exit
 cls
 echo critical error %errn%
 echo something happened during the process please try again
+pause
+exit
+
+:err_3
+cls
+echo error %errn%
+echo the optimised gif has been made regardless but is over the target size
 pause
 exit
 
@@ -78,7 +86,6 @@ if %h% equ %$h% set h=-1
 title sucre - exploding "%file%"
 call :$enc
 if exist "%file%" call :done
-
 set "errn=1"
 call :err_%errn% 2>nul
 
@@ -98,5 +105,8 @@ cls
 rd /s /q _temp
 if %dl% equ 1 call :clean
 echo the gif has successfully been made
+pause
+call sicle.bat 2>nul
+pause
 exit
 #>
