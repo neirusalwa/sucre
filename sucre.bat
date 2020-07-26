@@ -58,13 +58,14 @@ set $h=%h%
 call :%axis%
 
 :h
-if %h% geq 600 set h=600
-set w=-1
+set h=-1
+if %w% geq 400 set w=400
 call :enc
 
 :v
 set h=-1
-if %w% geq 600 set w=600
+if %h% geq 300 set h=300
+set w=-1
 call :enc
 
 :enc
