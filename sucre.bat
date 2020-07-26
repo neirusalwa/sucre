@@ -14,8 +14,7 @@ set root=%~dp0runes
 set dl=0
 set src=%~1
 if exist "%src%" call :probe
-for /f "delims=" %%I in ('where ytdl.bat') do set rune=%%I >nul 2>nul
-call %rune% & cls
+call ytdl.bat 2>nul
 call :probe
 
 :err_0
@@ -73,7 +72,6 @@ call :enc
 cd %root%
 set "s=-ss 0"
 set "t=-t %t%"
-::for /f "delims=" %%I in ('where seek.bat') do set rune=%%I >nul 2>nul
 call seek.bat 2>nul
 if %w% equ %$w% set w=-1
 if %h% equ %$h% set h=-1
