@@ -5,6 +5,9 @@ title module : sicle
 cls
 set "try=1"
 set "loss=25"
+if %dl% equ 1 (
+    set "file=%sucre%%a%"
+)
 set $file="%file%"
 for %%I IN (%$file%) do set size=%%~zI
 if %size% leq %target% (
@@ -14,11 +17,12 @@ if %size% leq %target% (
 for %%I IN (%$file%) do set $1=%%~dpI
 for %%I IN (%$file%) do set $2=%%~nI
 set fileout=%$1%%$2%.0.gif
-echo attempt number %try%, compression %loss%
-echo output will have the .0.gif extension
 
 :loop
+cls
 if %try% gtr 5 call :retry
+echo attempt number %try%, compression %loss%
+echo output will have the .0.gif extension
 gifsicle -O3 --lossy=%loss% "%file%" -o "%fileout%"
 set /a "try+=1"
 if %try% gtr 8 (
@@ -28,7 +32,6 @@ if %try% gtr 8 (
 set /a "loss+=25"
 for %%I IN ("%fileout%") do set sizeout=%%~zI
 if %sizeout% gtr %target% (
-    cls
     goto loop
 ) else (
     cls

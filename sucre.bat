@@ -3,19 +3,21 @@
 @chcp 65001 >nul
 title sucre
 set "errn=0"
-set PATH=%PATH%;%~dp0
 where ffmpeg.exe >nul 2>nul
 where ffprobe.exe >nul 2>nul
 where gifski.exe >nul 2>nul
 if not %errorlevel% geq 0 call :err_%errn%
 echo requirements met
-if exist "runes" set PATH=%PATH%;%~dp0;%~dp0runes >nul 2>nul 
-set root=%~dp0runes
 set dl=0
 set target=8000000
 set src=%~1
+set sucre=%~dp0
+set root=%~dp0runes 2>nul
 if exist "%src%" call :probe
-call ytdl.bat 2>nul
+if exist "%root%" 2>nul (
+    cd %root%
+    call ytdl.bat
+)
 call :probe
 
 :err_0
@@ -57,14 +59,16 @@ for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries str
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -sexagesimal -show_entries format^=duration -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "t=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=height -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "h=%%I"
 for /F "delims=" %%I in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=noprint_wrappers^=1:nokey^=1 "%src%" 2^>^&1') do set "w=%%I"
-cd %root%
 set axis=h
 if %h% geq %w% set axis=v
 set /a "f=%f%+%f%%%2"
 if %f% geq 50 set f=50
 set $w=%w%
 set $h=%h%
-call profiles.bat 2>nul && call :enc 2>nul
+if exist "%root%" 2>nul (
+    cd %root%
+    call profiles.bat 2>nul && call :enc 2>nul
+)
 call :%axis%
 
 :h
@@ -78,9 +82,13 @@ set w=-1
 call :enc
 
 :enc
+cd %sucre%
 set "s=-ss 0"
 set "t=-t %t%"
-call seek.bat 2>nul
+if exist "%root%" 2>nul (
+    cd %root%
+    call seek.bat 2>nul
+)
 if "%w%" == "%$w%" set w=-1
 if "%h%" == "%$h%" set h=-1
 title sucre - exploding "%file%"
@@ -98,6 +106,11 @@ goto :eof
 
 :clean
 del /q "%src%"
+cd %root%
+for /F "delims=" %%I in ('youtube-dl -q -i --no-playlist --no-warnings --restrict-filenames --get-filename -o "%%(title)s" %$u%') do set "a=%%I"
+set "a=%a%.gif"
+ren "%file%" "%a%" >nul 2>nul
+move "%a%" "%sucre%" >nul 2>nul
 goto:eof
 
 :done
@@ -105,8 +118,10 @@ cls
 rd /s /q _temp
 if %dl% equ 1 call :clean
 echo the gif has successfully been made
-pause
-call sicle.bat 2>nul
+if exist "%root%" 2>nul (
+    cd %root%
+    call sicle.bat 2>nul
+)
 pause
 exit
 #>
